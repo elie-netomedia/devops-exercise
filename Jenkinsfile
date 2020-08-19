@@ -21,9 +21,13 @@ pipeline {
         }
       }    
     }
-    stage('test-fail') {
+    stage('build and push') {
         steps {
-            echo "do you run?"
+            script {
+                def image = docker.build("elienetomedia/devops-exercise:latest")
+                /* Push the container to the custom Registry */
+                image.push()
+            }
         }
     }
   }
