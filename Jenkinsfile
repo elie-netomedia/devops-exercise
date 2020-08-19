@@ -1,20 +1,20 @@
 pipeline {
-  agent any
-  stages {
-    stage('test') {
-        agent{ 
-            docker { 
-                image 'python:3.8'
-                args '-u root:sudo'
-            } 
-        }
+    environment{
+        registry = "elienetomedia/devops-exercise"
+        regestryCredential = 'dockerhub-credentials	'
+    }
+    agent any
         stages{
-            stage("install requirements") {
+            stage("run tests") {
+                agent{ 
+                    docker { 
+                        image 'python:3.8'
+                        args '-u root:sudo'
+                    } 
+                }
                 steps {
                   sh 'pip install --user -r requirements.txt'
                 }
-            }
-            stage("exec test") {
                 steps {
                     sh 'python test.py'
                 }
@@ -24,16 +24,21 @@ pipeline {
                     }
                 }
             }
+            stage('build image') {
+                steps {
+                    script {
+                        dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                    }
+                }
+            }
+            stage('deploy image') {
+                steps {
+                    script {
+                        docker.withRegistry('', regestryCredential) {
+                            dockerImage.push()
+                        }
+                    }
+                }
+            }
         }
-    }
-    // stage('build and push') {
-    //     steps {
-    //         script {
-    //             def image = docker.build("elienetomedia/devops-exercise:latest")
-    //             /* Push the container to the custom Registry */
-    //             image.push()
-    //         }
-    //     }
-    // }
-  }
 }
