@@ -13,7 +13,7 @@ pipeline {
     }
     stage('test') {
       steps {
-        sh 'python unittest.py'
+        sh 'python test.py'
       }
       post {
         always {
