@@ -1,21 +1,20 @@
-pipeline{
-    agent any
-    stages{
-        stage("A"){
-            steps{
-                echo "========executing A========"
-            }
-        }
+pipeline {
+  agent { docker { image 'python:3.8' } }
+  stages {
+    stage('build') {
+      steps {
+        sh 'pip install -r requirements.txt'
+      }
     }
-    post{
-        always{
-            echo "========always========"
+    stage('test') {
+      steps {
+        sh 'python unittest.py'
+      }
+      post {
+        always {
+          junit 'results.xml'
         }
-        success{
-            echo "========pipeline executed successfully ========"
-        }
-        failure{
-            echo "========pipeline execution failed========"
-        }
+      }    
     }
+  }
 }
