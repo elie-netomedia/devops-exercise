@@ -13,9 +13,7 @@ pipeline {
                     } 
                 }
                 steps {
-                  sh 'pip install --user -r requirements.txt'
-                }
-                steps {
+                    sh 'pip install --user -r requirements.txt'
                     sh 'python test.py'
                 }
                 post {
