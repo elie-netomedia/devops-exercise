@@ -21,5 +21,10 @@ pipeline {
         }
       }    
     }
+    stage('test-fail') {
+        steps {
+            echo "do you run?"
+        }
+    }
   }
 }
