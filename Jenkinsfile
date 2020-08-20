@@ -2,6 +2,10 @@ pipeline {
     environment{
         registry = "elienetomedia/devops-exercise"
         regestryCredential = 'dockerhub-credentials	'
+        PROJECT_ID = 'eli-poc'
+        CLUSTER_NAME = 'devops-exercise-cluster'
+        LOCATION = 'us-central1-c'
+        CREDENTIALS_ID = 'gke'
     }
     agent any
         stages{
@@ -36,6 +40,12 @@ pipeline {
                             dockerImage.push()
                         }
                     }
+                }
+            }
+            stage('Deploy to GKE') {
+                steps{
+                    // sh "sed -i 's/hello:latest/hello:${env.BUILD_ID}/g' deployment.yaml"
+                    step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'k8s', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
                 }
             }
         }
