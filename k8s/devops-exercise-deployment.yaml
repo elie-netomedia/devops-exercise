@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: elienetomedia/devops-exercise:21
+        image: elienetomedia/devops-exercise:28
         ports:
         - containerPort: 80
