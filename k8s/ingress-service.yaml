@@ -9,7 +9,7 @@ spec:
   rules:
     - http:
         paths:
-          - path: /?(.*)
+          - path: /
             backend:
                 serviceName: devops-exercise-service
                 servicePort: 80
