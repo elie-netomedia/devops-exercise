@@ -13,6 +13,11 @@ spec:
             backend:
                 serviceName: devops-exercise-service
                 servicePort: 80
+          - path: /minute.html
+            backend:
+              serviceName: devops-exercise-service
+              servicePort: 80
+
 # apiVersion: networking.k8s.io/v1beta1
 # kind: Ingress
 # metadata:
