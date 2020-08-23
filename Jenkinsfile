@@ -44,21 +44,22 @@ pipeline {
                         }
                     }
                 }
-                post {
-                    always {
-                        archiveArtifacts artifacts: 'index.html', followSymlinks: false
-                    }
-                }
             }
             stage('Deploy to GKE') {
                 steps{
                     sh "sed -i 's/devops-exercise:latest/devops-exercise:${env.BUILD_NUMBER}/g' k8s/devops-exercise-deployment.yaml"
                     step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'k8s', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
                 }
-                post {
-                    always {
-                        archiveArtifacts artifacts: 'k8s/devops-exercise-deployment.yaml', followSymlinks: false
-                    }
+            }
+            post {
+                always {
+                    echo 'Pipeline completed'
+                }
+                success {
+                    echo 'Pipeline completed successfully'
+                }
+                failure {
+                    echo 'Pipeline finished with an error, see the logs for more information'
                 }
             }
         }
