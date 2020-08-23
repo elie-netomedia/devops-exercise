@@ -1,7 +1,5 @@
 pipeline {
     environment{
-        registry = "elienetomedia/devops-exercise"
-        regestryCredential = 'dockerhub-credentials	'
         PROJECT_ID = 'eli-poc'
         CLUSTER_NAME = 'devops-exercise-cluster'
         LOCATION = 'us-central1-c'
