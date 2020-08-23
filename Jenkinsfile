@@ -29,22 +29,24 @@ pipeline {
             stage('build image') {
                 steps {
                     script {
-                        dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                        dockerImageBuildNumber = docker.build registry + ":$BUILD_NUMBER"
+                        dockerImageLatest = docker.build registry + ":latest"
                     }
                 }
             }
-            stage('deploy image') {
+            stage('deploy image to Docker Hub') {
                 steps {
                     script {
                         docker.withRegistry('', regestryCredential) {
-                            dockerImage.push()
+                            dockerImageBuildNumber.push()
+                            dockerImageLatest.push()
                         }
                     }
                 }
             }
             stage('Deploy to GKE') {
                 steps{
-                    // sh "sed -i 's/hello:latest/hello:${env.BUILD_ID}/g' deployment.yaml"
+                    // sh "sed -i 's/elienetomedia/devops-exercise:latest/elienetomedia/devops-exercise:${env.TAG_NAME}/g' k8s/devops-exercise-deployment.yaml"
                     step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'k8s', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
                 }
             }
