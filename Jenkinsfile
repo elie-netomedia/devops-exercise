@@ -28,6 +28,7 @@ pipeline {
             }
             stage('build image') {
                 steps {
+                    sh "sed -i 's/Hello world latest version/Hello world latest version:${env:BUILD_NUMBER}/g' index.html"
                     script {
                         dockerImageBuildNumber = docker.build registry + ":$BUILD_NUMBER"
                         dockerImageLatest = docker.build registry + ":latest"
