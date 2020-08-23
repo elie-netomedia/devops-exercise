@@ -55,6 +55,11 @@ pipeline {
                     sh "sed -i 's@/${env.registry}:latest@/${env.registry}:${env.BUILD_NUMBER}/@g' k8s/devops-exercise-deployment.yaml"
                     step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'k8s', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
                 }
+                post {
+                    always {
+                        archiveArtifacts artifacts: 'k8s/devops-exercise-deployment.yaml', followSymlinks: false
+                    }
+                }
             }
         }
 }
