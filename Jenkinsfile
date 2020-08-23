@@ -44,6 +44,11 @@ pipeline {
                         }
                     }
                 }
+                post {
+                    always {
+                        archiveArtifacts artifacts: 'index.html', followSymlinks: false
+                    }
+                }
             }
             stage('Deploy to GKE') {
                 steps{
