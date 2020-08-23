@@ -52,7 +52,7 @@ pipeline {
             }
             stage('Deploy to GKE') {
                 steps{
-                    sh "sed -i 's/elienetomedia/devops-exercise:latest/elienetomedia/devops-exercise:${env.BUILD_NUMBER}/g' k8s/devops-exercise-deployment.yaml"
+                    sh "sed -i 's/elienetomedia\/devops-exercise:latest/elienetomedia\/devops-exercise:${env.BUILD_NUMBER}/g' k8s/devops-exercise-deployment.yaml"
                     step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'k8s', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
                 }
             }
